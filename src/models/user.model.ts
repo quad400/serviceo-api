@@ -61,7 +61,7 @@ const userSchema = new mongoose.Schema<IUser>({
   // bookings: {
   //   type: []
   // }
-});
+}, {timestamps: true});
 
 
 const User = mongoose.model<IUser>("User", userSchema)
