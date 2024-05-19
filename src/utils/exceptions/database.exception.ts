@@ -1,4 +1,5 @@
 import {
+  HTTP_STATUS_FORBIDDEN,
   HTTP_STATUS_NOT_ACCEPTABLE,
   HTTP_STATUS_NOT_FOUND,
 } from "../../constants/status-codes.constant";
@@ -6,10 +7,12 @@ import {
 export enum ExceptionCodes {
   DUPLICATE_ENTRY = "DUPLICATE_ENTRY",
   NOT_FOUND = "NOT_FOUND",
+  PERMISSION_DENIED = "PERMISSION_DENIED"
 }
 
 export const ExceptionCodesToStatusCodeMapping = {
   [ExceptionCodes.NOT_FOUND]: HTTP_STATUS_NOT_FOUND,
+  [ExceptionCodes.PERMISSION_DENIED] : HTTP_STATUS_FORBIDDEN,
   [ExceptionCodes.DUPLICATE_ENTRY]: HTTP_STATUS_NOT_ACCEPTABLE,
 };
 

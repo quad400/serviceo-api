@@ -1,5 +1,5 @@
 import { Schema, model, Types } from "mongoose";
-import { ICategory, IService, IReview } from "../interfaces/service.interface";
+import { ICategory, IService, IReview, IBooking } from "../interfaces/service.interface";
 
 const categorySchema = new Schema<ICategory>({
   name: {
@@ -16,10 +16,16 @@ const categorySchema = new Schema<ICategory>({
   }
 });
 
+
 const reviewSchema = new Schema<IReview>({
   user: {
     type: Types.ObjectId,
     ref: "User",
+    required: true,
+  }, 
+  service: {
+    type: Types.ObjectId,
+    ref: "Service",
     required: true,
   },
   rate: {
@@ -28,7 +34,12 @@ const reviewSchema = new Schema<IReview>({
   },
   comment: {
     type: String,
+    default: null
   },
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  }
 });
 
 const serviceSchema = new Schema<IService>({
@@ -51,9 +62,11 @@ const serviceSchema = new Schema<IService>({
   },
   price: {
     type: Number,
+    required: true
   },
   discountPercent: {
     type: Number,
+    default: null
   },
   createdBy: {
     type: Types.ObjectId,
@@ -64,7 +77,7 @@ const serviceSchema = new Schema<IService>({
     type: [Types.ObjectId],
     ref: "Review",
   },
-});
+}, {timestamps: true});
 
 export const Review = model<IReview>("Review", reviewSchema);
 export const Category = model<ICategory>("Category", categorySchema);

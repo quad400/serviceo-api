@@ -9,7 +9,9 @@ export interface ICategory {
 export interface IReview {
   user: IUser;
   rate: number;
+  service: IService;
   comment?: string;
+  createdAt: Date
 }
 
 export interface IService {
@@ -24,7 +26,10 @@ export interface IService {
 }
 
 export interface IBooking {
-  user: IUser;
   service: IService;
   datetime: Date;
+  count: number;
+  status: string;
+  createdBy: IUser;
+  address: string;
 }

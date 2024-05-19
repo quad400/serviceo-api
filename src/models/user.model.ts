@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
-import { IUser, IAddress, IPaymentInfo } from "../interfaces/user.interface";
+import { IUser, IAddress, IPaymentInfo, Role } from "../interfaces/user.interface";
 
 const addressSchema = new mongoose.Schema<IAddress>({
   label: {
@@ -29,13 +29,24 @@ const paymentInfoSchema = new mongoose.Schema<IPaymentInfo>({
 });
 
 const userSchema = new mongoose.Schema<IUser>({
-  fullName: String,
+  fullName: {
+   type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true,
     unique: true,
   },
-  avatar: String,
+  avatar: {
+   type: String,
+   default: null
+  },
+  role: {
+    type: String,
+    enum: Role,
+    default: Role.USER
+  },
   password: {
     type: String,
     required: true,
@@ -50,6 +61,10 @@ const userSchema = new mongoose.Schema<IUser>({
   otpCodeExpire: {
     type: Date,
   },
+  services: {
+    type: [Types.ObjectId],
+    default: []
+  },
   address: {
     type: [addressSchema],
     default: [],
@@ -58,9 +73,11 @@ const userSchema = new mongoose.Schema<IUser>({
     type: [paymentInfoSchema],
     default: [],
   },
-  // bookings: {
-  //   type: []
-  // }
+  bookings: {
+    type: [Types.ObjectId],
+    ref: "Booking",
+    default: []
+  }
 }, {timestamps: true});
 
 

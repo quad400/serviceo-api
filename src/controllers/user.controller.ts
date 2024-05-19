@@ -19,7 +19,7 @@ import { updateUserDao, userDao } from "../dao/user.dao";
  * `POST` /api/auth/register
  */
 export const register = async (req: Request, res: Response) => {
-  const body = req.body as IRegister;
+  const body = req.body;
 
   res.status(HTTP_STATUS_CREATED).json(await registerService(body));
 };
@@ -96,7 +96,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 };
 
 /**
- * `POST` /api/auth/forgot-password
+ * `POST` /api/auth/reset-password
  */
 export const resetPassword = async (req: Request, res: Response) => {
   const body = req.body;

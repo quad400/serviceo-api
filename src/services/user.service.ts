@@ -24,11 +24,11 @@ import {
 } from "../constants/status-codes.constant";
 import { emailManager } from "../utils/helpers/email.helper";
 
-export const registerService = async (dto: IRegister) => {
-  dto.password = await hash(dto.password);
+export const registerService = async (dao: any) => {
+  dao.password = await hash(dao.password);
 
   try {
-    const user = await registerDao(dto);
+    const user = await registerDao(dao);
 
     generateOtp(user);
 
@@ -45,7 +45,7 @@ export const registerService = async (dto: IRegister) => {
     };
 
     await emailManager({
-      subject: "Welcome to lundenva. Please verify your email",
+      subject: "Welcome to serviceo. Please verify your email",
       emailSource: emailTemplateSourceForgotPassword,
       templateData,
       user,
@@ -60,11 +60,11 @@ export const registerService = async (dto: IRegister) => {
   }
 };
 
-export const loginService = async (dto: ILogin) => {
+export const loginService = async (dao: ILogin) => {
   try {
-    const user = await loginDao(dto);
+    const user = await loginDao(dao);
 
-    const isPasswordOk = await bcrypt.compare(dto?.password, user.password);
+    const isPasswordOk = await bcrypt.compare(dao?.password, user.password);
 
     if (isPasswordOk) {
       if (user.verifiedUser) {

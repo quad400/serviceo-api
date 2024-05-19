@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv"
-
+import { v2 as cloudinary } from "cloudinary";
 import { app } from "./app";
 import { PORT } from "./constants/env.constant";
 
 dotenv.config()
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_APIKEY,
+  api_secret: process.env.CLOUDINARY_SECRETKEY,
+});
 
 function server() {
   async function connectDB() {

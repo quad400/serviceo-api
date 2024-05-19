@@ -1,8 +1,9 @@
 import { IBooking, IService } from "./service.interface";
 
-enum Role {
+export enum Role {
   USER = "user",
   PROVIDER = "provider",
+  ADMIN = "admin",
 }
 
 export interface IUser {
@@ -14,6 +15,7 @@ export interface IUser {
   verifiedUser?: boolean;
   otpCode?: string;
   otpCodeExpire?: Date;
+  services?: [IService];
   address?: [IAddress];
   paymentInfo?: [IPaymentInfo];
   bookings?: [IBooking];
@@ -40,6 +42,10 @@ export interface IUserService extends IUser {
   services: [IService];
 }
 
-export type IRegister = Pick<IUser, "email" | "password" | "fullName">;
+export type IReg = Pick<IUser, "email" | "password" | "fullName" | "role">;
 
+export type IRegister = {
+  user: IReg;
+  isProvider: boolean;
+};
 export type ILogin = Pick<IUser, "email" | "password">;

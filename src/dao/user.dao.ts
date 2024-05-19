@@ -1,26 +1,32 @@
-import type { ILogin, IRegister, IUser } from "../interfaces/user.interface";
+import {
+  Role,
+  type ILogin,
+  type IUser,
+} from "../interfaces/user.interface";
 import User from "../models/user.model";
 import {
   DatabaseException,
   ExceptionCodes,
 } from "../utils/exceptions/database.exception";
-import { HttpException } from "../utils/exceptions/http.exceptions";
+import { duplicateModelEntry } from "../utils/helpers/dao.helper";
 
-export async function registerDao(dto: IRegister) {
-  const userExist = await User.findOne({ email: dto?.email });
-
-  if (userExist) {
-    throw new DatabaseException(
-      ExceptionCodes.DUPLICATE_ENTRY,
-      "user already exists"
-    );
+export async function registerDao(dao: any) {
+  const { email, fullName, password, isProvider } = dao;
+  await duplicateModelEntry(User, { email: dao.email });
+  if (isProvider===true) {
+    return await User.create({
+      email,
+      fullName,
+      password,
+      role: Role.PROVIDER,
+    });
   }
 
-  return await User.create(dto);
+  return await User.create({ email, fullName, password });
 }
 
-export async function loginDao(dto: ILogin) {
-  const userExist = await User.findOne({ email: dto?.email });
+export async function loginDao(dao: ILogin) {
+  const userExist = await User.findOne({ email: dao?.email });
 
   if (!userExist) {
     throw new DatabaseException(
@@ -63,7 +69,7 @@ export async function updateUserDao(id: string, body: IUser) {
   if (!user) {
     throw new DatabaseException(ExceptionCodes.NOT_FOUND, "user not found");
   }
-  
+
   return user;
 }
 
@@ -80,12 +86,11 @@ export async function forgotPasswordDao(email: string) {
   return userExist;
 }
 
-export async function resetPasswordDao(id: string){
+export async function resetPasswordDao(id: string) {
+  const user = await User.findById(id);
 
-  const user = await User.findById(id)
-
-  if(!user){
+  if (!user) {
     throw new DatabaseException(ExceptionCodes.NOT_FOUND, "user not found");
   }
-  return user
+  return user;
 }
